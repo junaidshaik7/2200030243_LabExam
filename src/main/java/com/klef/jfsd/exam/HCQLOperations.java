@@ -37,12 +37,10 @@ public class HCQLOperations {
         Project project = new Project();
 
         System.out.println("Would you like to enter a new project? (y/n)");
-
-        // Check if the user wants to enter new data or use default values
         String userInput = sc.nextLine();
         
         if (userInput.equalsIgnoreCase("y")) {
-            // Enter details manually
+         
             System.out.print("Enter Project Name: ");
             project.setProjectName(sc.nextLine());
 
@@ -57,14 +55,14 @@ public class HCQLOperations {
             System.out.print("Enter Team Lead Name: ");
             project.setTeamLead(sc.nextLine());
         } else {
-            // Default project values
+           
             project.setProjectName("Default Project");
-            project.setDuration(12); // Default duration (1 year)
-            project.setBudget(100000.0); // Default budget
-            project.setTeamLead("John Doe"); // Default team lead
+            project.setDuration(12);
+            project.setBudget(100000.0); 
+            project.setTeamLead("John Doe"); 
         }
 
-        // Persist the project object
+     
         session.persist(project);
         t.commit();
         System.out.println("Project Added Successfully: " + project);
@@ -74,7 +72,6 @@ public class HCQLOperations {
         sc.close();
     }
 
-    // Method to perform aggregate functions on the Budget
     public void aggregateFunctions() {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
@@ -82,27 +79,23 @@ public class HCQLOperations {
         SessionFactory sf = configuration.buildSessionFactory();
         Session session = sf.openSession();
 
-        // Get CriteriaBuilder
+   
         CriteriaBuilder cb = session.getCriteriaBuilder();
-        
-        // CriteriaQuery for aggregate operations
+       
         CriteriaQuery<Object[]> cq = cb.createQuery(Object[].class);
         Root<Project> root = cq.from(Project.class);
         
-        // Aggregate functions on the Budget
         cq.multiselect(
-            cb.count(root.get("budget")),        // COUNT
-            cb.max(root.get("budget")),          // MAX
-            cb.min(root.get("budget")),          // MIN
-            cb.sum(root.get("budget")),          // SUM
-            cb.avg(root.get("budget"))           // AVG
+            cb.count(root.get("budget")),       
+            cb.max(root.get("budget")),         
+            cb.min(root.get("budget")),         
+            cb.sum(root.get("budget")),          
+            cb.avg(root.get("budget"))          
         );
 
-        // Execute the query
         Query<Object[]> query = session.createQuery(cq);
         List<Object[]> result = query.getResultList();
 
-        // Print the aggregate values
         for (Object[] values : result) {
             System.out.println("Count: " + values[0]);
             System.out.println("Max Budget: " + values[1]);

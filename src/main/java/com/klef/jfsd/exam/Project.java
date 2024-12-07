@@ -12,7 +12,7 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String projectName;
-    private int duration; // Duration in months
+    private int duration; 
     private double budget;
     private String teamLead;
     
